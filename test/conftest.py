@@ -134,6 +134,7 @@ def testdir(testdir):
             """
         import pytest
         import schemathesis
+        from schemathesis import InputType
         from test.utils import *
         from hypothesis import given, settings, HealthCheck
         raw_schema = {schema}

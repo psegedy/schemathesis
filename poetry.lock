@@ -146,6 +146,17 @@ jsonschema = ">=3.0.2"
 
 [[package]]
 category = "main"
+description = ""
+name = "hypothesis-jsonschema-unfit"
+optional = false
+python-versions = ">=3.6,<4.0"
+version = "0.1.0"
+
+[package.dependencies]
+hypothesis_jsonschema = ">=0.9.13,<1.0"
+
+[[package]]
+category = "main"
 description = "Internationalized Domain Names in Applications (IDNA)"
 name = "idna"
 optional = false
@@ -462,7 +473,7 @@ version = "0.6.0"
 more-itertools = "*"
 
 [metadata]
-content-hash = "c1761012d09ca516a5cc320e7860127912858ed037a9d6d886e38b2723616fef"
+content-hash = "d85453c8ab4e085b6c3c62da0f2937dd4ed323efe6ff3120103b928c66c1da95"
 python-versions = "^3.6"
 
 [metadata.hashes]
@@ -480,6 +491,7 @@ execnet = ["cacb9df31c9680ec5f95553976c4da484d407e85e41c83cb812aa014f0eddc50", "
 flask = ["13f9f196f330c7c2c5d7a5cf91af894110ca0215ac051b5844701f2bfd934d52", "45eb5a6fd193d6cf7e0cf5d8a5b31f83d5faae0293695626f539a823e93b13f6"]
 hypothesis = ["37055645e8a32dc50164414efb0d87f33ec5e43b1c7a72015533489c5e4c4263", "f457ecf3846210ddd1dfa38befeddc27c6b755057877b9876b7526e75dbb2409"]
 hypothesis-jsonschema = ["e5d4d478deb80d6905be51877219f338af01ca0ab516bfce2c2ae8eb68ed6faa", "eadd3c25dffed06390773c54c3d7632e5ade9fe2eb30fea1e236dd4f04285729"]
+hypothesis-jsonschema-unfit = ["2ebdc9a38dd6d061c3a29800b5f674b4fb905556d8fd5a49357abe5977392914", "72a697bb5f207c770a4fb998ed0446a7673bb84c26b4b228c5be03c4d7b8c004"]
 idna = ["c357b3f628cf53ae2c4c05627ecc484553142ca23264e593d327bcde5e9c3407", "ea8b7f6188e6fa117537c3df7da9fc686d485087abf6ac197f9c46432f7e4a3c"]
 idna-ssl = ["a933e3bb13da54383f9e8f35dc4f9cb9eb9b3b78c6b36f311254d6d0d92c6c7c"]
 importlib-metadata = ["bdd9b7c397c273bcc9a11d6629a38487cd07154fa255a467bf704cd2c258e359", "f17c015735e1a88296994c0697ecea7e11db24290941983b08c9feb30921e6d8"]
