@@ -12,6 +12,7 @@ from requests import exceptions
 
 from .. import checks as checks_module
 from .. import models, runner, utils
+from ..constants import InputType
 from ..exceptions import HTTPError
 from ..loaders import from_path, get_loader_for_app
 from ..runner import events
@@ -96,6 +97,7 @@ def schemathesis(pre_run: Optional[str] = None) -> None:
 @click.option("--app", help="WSGI application to test", type=str, callback=callbacks.validate_app)
 @click.option("--request-timeout", help="Timeout in milliseconds for network requests during the test run.", type=int)
 @click.option("--validate-schema", help="Enable or disable validation of input schema.", type=bool, default=True)
+@click.option("--input-types", help="Input type to be generated", type=CSVOption(InputType))
 @click.option(
     "--hypothesis-deadline",
     help="Duration in milliseconds that each individual example with a test is not allowed to exceed.",
@@ -137,6 +139,7 @@ def run(  # pylint: disable=too-many-arguments
     app: Any = None,
     request_timeout: Optional[int] = None,
     validate_schema: bool = True,
+    input_types: Optional[InputType] = None,
     hypothesis_deadline: Optional[Union[int, NotSet]] = None,
     hypothesis_derandomize: Optional[bool] = None,
     hypothesis_max_examples: Optional[int] = None,
@@ -160,7 +163,9 @@ def run(  # pylint: disable=too-many-arguments
 
     options = dict_true_values(
         api_options=dict_true_values(auth=auth, auth_type=auth_type, headers=headers, request_timeout=request_timeout),
-        loader_options=dict_true_values(base_url=base_url, endpoint=endpoints, method=methods, tag=tags, app=app),
+        loader_options=dict_true_values(
+            base_url=base_url, endpoint=endpoints, method=methods, tag=tags, input_types=input_types, app=app
+        ),
         hypothesis_options=dict_not_none_values(
             derandomize=hypothesis_derandomize,
             max_examples=hypothesis_max_examples,

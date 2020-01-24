@@ -21,15 +21,13 @@ import yaml
 from requests.structures import CaseInsensitiveDict
 
 from ._hypothesis import make_test_or_exception
-from .constants import HookLocation, InputType
+from .constants import DEFAULT_INPUT_TYPES, HookLocation, InputType
 from .converter import to_json_schema
 from .exceptions import InvalidSchema
 from .filters import should_skip_by_tag, should_skip_endpoint, should_skip_method
 from .models import Endpoint, empty_object
-from .types import Filter, Hook
+from .types import Filter, Hook, NotSet
 from .utils import NOT_SET, StringDatesYAMLLoader
-
-DEFAULT_INPUT_TYPES = (InputType.valid,)
 
 
 @lru_cache()
@@ -96,15 +94,16 @@ class BaseSchema(Mapping):
         """Generate all endpoints and Hypothesis tests for them."""
         test: Union[Callable, InvalidSchema]
         for endpoint in self.get_all_endpoints():
-            test = make_test_or_exception(endpoint, func, settings, seed)
-            yield endpoint, test
+            for input_type in self.input_types:
+                test = make_test_or_exception(endpoint, func, settings, seed, input_type=input_type)
+                yield endpoint, test
 
     def parametrize(
         self,
         method: Optional[Filter] = NOT_SET,
         endpoint: Optional[Filter] = NOT_SET,
         tag: Optional[Filter] = NOT_SET,
-        input_types: Iterable[InputType] = DEFAULT_INPUT_TYPES,
+        input_types: Union[Iterable[InputType], NotSet] = NOT_SET,
     ) -> Callable:
         """Mark a test function as a parametrized one."""
         if method is NOT_SET:
@@ -113,6 +112,11 @@ class BaseSchema(Mapping):
             endpoint = self.endpoint
         if tag is NOT_SET:
             tag = self.tag
+        # Need a different name because of mypy
+        if isinstance(input_types, NotSet):
+            input_types_ = self.input_types
+        else:
+            input_types_ = input_types
 
         def wrapper(func: Callable) -> Callable:
             func._schemathesis_test = self.__class__(  # type: ignore
@@ -121,7 +125,7 @@ class BaseSchema(Mapping):
                 method=method,
                 endpoint=endpoint,
                 tag=tag,
-                input_types=input_types,
+                input_types=input_types_,
             )
             return func
 
